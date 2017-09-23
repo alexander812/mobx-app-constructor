@@ -1,5 +1,6 @@
 import { protoName } from './util';
 
+
 export default function (appBinder) {
   return class BaseStore {
         disposers = [];

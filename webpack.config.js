@@ -6,14 +6,14 @@ var path = require('path');
 
 
 var appConfig = {
-    context: path.resolve(__dirname, 'src/js'),
+    context: path.resolve(__dirname, 'src'),
 
     entry: {
-        entry: './index.js'
+        index: './index.js'
     },
     output: {
-        path:       path.resolve(__dirname, 'public/js'),
-        publicPath: './public/js/',
+        path:       path.resolve(__dirname, 'public'),
+        publicPath: './public/',
         filename:   "[name].js"
     },
 
@@ -49,7 +49,7 @@ var appConfig = {
     },
     resolve: {
         root:[
-            path.resolve('./src/js/')
+            path.resolve('./src/')
         ],
         alias:{},
         modulesDirectories: ['node_modules'],

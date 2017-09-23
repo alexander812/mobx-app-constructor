@@ -2,6 +2,8 @@ import _ from 'lodash';
 import { toJS } from 'mobx';
 import { protoName } from './util';
 
+
+
 class Binder {
     stores = {};
 
@@ -67,6 +69,7 @@ class Binder {
                 list: [],
                 services: {},
             },
+            autobind: true,
         };
     }
 

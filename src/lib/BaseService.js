@@ -110,7 +110,11 @@ export default function (BaseStore, serviceStarter) {
 
         proceedService(id, fn, state1, state2) {
           const initiator = id || 'unknown';
+          const conf = this.getConfig();
           return new Promise((resolve, reject) => {
+            if(conf && conf.bindAs && !(conf.autobind === false)){
+              this.bindApp();
+            }
             const result = this[fn]();
 
             if (result instanceof Promise) {
