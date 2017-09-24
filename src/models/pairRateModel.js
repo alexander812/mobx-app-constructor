@@ -1,35 +1,25 @@
-import {BaseService} from 'helper/context';
-import {APP_SERVICE} from 'constants/moduleNames';
-import {observable} from 'mobx';
+import Model from 'lib/Model';
 
+class PairRateModel extends Model {
 
-class AppService extends BaseService {
+  attribures = {
+    pair:{value:null},
+    rate:{value:0},
+    prevRate:{value:0},
+    diff:{value:0},
+  };
 
-    config = {
-      bindAs: APP_SERVICE,
-      debug: true,
-    };
+  parse(data, prevModel){
 
-
-    @observable pairRates  = {};
-
-
-
-    onStart(){
-
-      console.log(['AppService startDo']);
-      this.generator();
-
-      return true;
+    return {
+      id: data.pair,
+      rate: data.rate,
+      prevRate: prevModel && prevModel.rate,
+      diff: prevModel ? data.rate - prevModel.rate : 0
     }
 
-    generator(){
-      setInterval(()=>{
+  }
 
-        this
-
-      }, 2000)
-    }
 }
 
-export default new AppService();
+export default new PairRateModel();
