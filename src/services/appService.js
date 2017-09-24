@@ -33,8 +33,7 @@ class AppService extends BaseService {
 
 
         this.pairRateCollection.update(
-          toUpdate,
-          {remove:false});
+          toUpdate);
 
         console.log(['this.pairRateCollection.', toJS(this.pairRateCollection.models)]);
 
