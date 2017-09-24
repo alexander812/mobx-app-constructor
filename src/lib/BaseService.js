@@ -112,7 +112,7 @@ export default function (BaseStore, serviceStarter) {
           const initiator = id || 'unknown';
           const conf = this.getConfig();
           return new Promise((resolve, reject) => {
-            if(conf && conf.bindAs && !(conf.autobind === false)){
+            if(conf && conf.bindAs && !(conf.autoBind === false)){
               this.bindApp();
             }
             const result = this[fn]();

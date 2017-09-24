@@ -69,7 +69,7 @@ class Binder {
                 list: [],
                 services: {},
             },
-            autobind: true,
+            autoBind: true,
         };
     }
 
