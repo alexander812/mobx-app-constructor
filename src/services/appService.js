@@ -24,6 +24,8 @@ class AppService extends BaseService {
     onStart(){
 
       console.log(['AppService startDo']);
+
+      /*
       this.generator((data)=>{
 
         let toUpdate = data.map((item)=>{
@@ -38,7 +40,7 @@ class AppService extends BaseService {
         console.log(['this.pairRateCollection.', toJS(this.pairRateCollection.models)]);
 
       });
-
+*/
       return true;
     }
 
