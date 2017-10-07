@@ -11,12 +11,11 @@ var appConfig = {
     entry: {
         index: './index.js'
     },
-    output: {
-        path:       path.resolve(__dirname, 'public'),
-        publicPath: './public/',
-        filename:   "[name].js"
-    },
-
+  output: {
+    path: __dirname,
+    filename: "bundle.js",
+    publicPath: "/static/"
+  },
     watch: NODE_ENV == 'development',
 
     watchOptions: {

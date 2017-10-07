@@ -1,6 +1,7 @@
 import {BaseService} from 'helper/context';
-import {APP_SERVICE} from 'constants/moduleNames';
+import {PAIR_SERVICE} from 'constants/moduleNames';
 import {observable, toJS} from 'mobx';
+import pairRateModel from 'models/pairRateModel';
 import Collection from 'lib/Collection';
 
 
@@ -8,10 +9,10 @@ function randNumber(min, max){
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-class AppService extends BaseService {
+class PairService extends BaseService {
 
     config = {
-      bindAs: APP_SERVICE,
+      bindAs: PAIR_SERVICE,
       debug: true,
     };
 
@@ -21,11 +22,11 @@ class AppService extends BaseService {
 
 
     onStart(){
-      //
 
-      console.log(['AppService']);
 
-      /*
+      //console.log(['PairService']);
+
+
       this.generator((data)=>{
 
         let toUpdate = data.map((item)=>{
@@ -37,10 +38,10 @@ class AppService extends BaseService {
         this.pairRateCollection.update(
           toUpdate);
 
-        console.log(['this.pairRateCollection.', toJS(this.pairRateCollection.models)]);
+        //console.log(['this.pairRateCollection.', toJS(this.pairRateCollection.models)]);
 
       });
-*/
+
       return true;
     }
 
@@ -72,4 +73,4 @@ class AppService extends BaseService {
     }
 }
 
-export default new AppService();
+export default new PairService();
