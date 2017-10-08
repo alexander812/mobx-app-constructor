@@ -2,7 +2,7 @@ import {BaseService} from 'helper/context';
 import {PAIR_SERVICE} from 'constants/moduleNames';
 import {observable, toJS} from 'mobx';
 import pairRateModel from 'models/pairRateModel';
-import Collection from 'lib/Collection';
+import SingleSelectedCollection from 'lib/SingleSelectedCollection';
 
 
 function randNumber(min, max){
@@ -13,18 +13,36 @@ class PairService extends BaseService {
 
     config = {
       bindAs: PAIR_SERVICE,
-      debug: true,
+      //debug: true,
+    };
+
+    api = {
+      selectPair: this.selectPair
     };
 
 
-    pairRateCollection = new Collection([]);
+    pairRateCollection = new SingleSelectedCollection([
+      {
+        id: 'EURUSD',
+        rate: 0,
+        prevRate:0,
+        selected:true,
+        diff:0
+      },
+      {
+        id: 'GBPUSD',
+        rate: 0,
+        prevRate:0,
+        selected:false,
+        diff:0
+      }
+
+    ]);
 
 
 
     onStart(){
 
-
-      //console.log(['PairService']);
 
 
       this.generator((data)=>{
@@ -44,6 +62,12 @@ class PairService extends BaseService {
 
       return true;
     }
+
+  selectPair(id){
+    this.pairRateCollection.select(id);
+
+    //console.log(['this.pairRateCollection.', this.pairRateCollection.models]);
+  }
 
     generator(fn){
       const data = [

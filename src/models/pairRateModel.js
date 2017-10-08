@@ -3,6 +3,7 @@ import Model from 'lib/Model';
 class PairRateModel extends Model {
 
   attribures = {
+    id:{value:null},
     pair:{value:null},
     rate:{value:0},
     prevRate:{value:0},
