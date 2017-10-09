@@ -11,56 +11,46 @@ var appConfig = {
     entry: {
         index: './index.js'
     },
-  output: {
-    path: __dirname,
-    filename: "bundle.js",
-    publicPath: "/static/"
-  },
+    output: {
+        path: __dirname,
+        filename: 'bundle.js',
+        publicPath: '/static/'
+    },
     watch: NODE_ENV == 'development',
 
     watchOptions: {
         aggregateTimeout: 100
     },
-    //devtool: NODE_ENV == 'development' ? "cheap-inline-module-source-map" : null,
-    devtool:  "inline-source-map",
+    //devtool: NODE_ENV == 'development' ? 'cheap-inline-module-source-map' : null,
+    devtool: 'inline-source-map',
     plugins: [
         new webpack.IgnorePlugin(/\.\/locale/)
     ],
     module: {
-        loaders:[
+        rules: [
             {
                 test: /\.jsx$/,
-                loader: "babel"
+                use: ['babel-loader']
             },
             {
-                test:   /\.js$/,
-                loader: "babel",
-                query: {
-                    compact:'true'
-                }
+                test: /\.js$/,
+                use: ['babel-loader']
             },
             {
                 test: /\.html$/,
-                loader: 'ignore-loader'
+                use: ['ignore-loader']
             }
 
         ]
     },
     resolve: {
-        root:[
-            path.resolve('./src/')
+        modules: [
+            path.resolve('./src/'),
+            'node_modules'
         ],
-        alias:{},
-        modulesDirectories: ['node_modules'],
-        extensions:         ['', '.js', '.jsx']
-    },
-
-    resolveLoader: {
-        modulesDirectories: ['node_modules'],
-        moduleTemplates:    ['*-loader', '*'],
-        extensions:         ['', '.js', '.jsx']
+        alias: {},
+        extensions: ['.js', '.jsx']
     }
-
 };
 
 console.log('NODE_ENV', NODE_ENV);
@@ -69,9 +59,9 @@ if (NODE_ENV == 'production') {
         new webpack.optimize.UglifyJsPlugin({
             compress: {
                 // don't show unreachable variables etc
-                warnings:     false,
+                warnings: false,
                 drop_console: true,
-                unsafe:       true
+                unsafe: true
             }
         })
     );
