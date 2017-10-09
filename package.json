@@ -2,7 +2,9 @@
   "name": "Mobx_test",
   "version": "0.1.0",
   "scripts": {
-    "start": "webpack-dev-server --progress --inline --hot"
+    "start": "webpack-dev-server --progress --inline --hot",
+    "styleguide": "styleguidist server",
+    "styleguide:build": "styleguidist build"
   },
   "devDependencies": {
     "babel-core": "^6.9.1",
@@ -16,6 +18,7 @@
     "babel-preset-stage-1": "^6.5.0",
     "eslint": "^4.8.0",
     "eslint-plugin-react": "^7.4.0",
+    "react-styleguidist": "^6.0.28",
     "validate.js": "^0.11.1",
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.9.1"
