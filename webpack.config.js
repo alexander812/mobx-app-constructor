@@ -61,6 +61,15 @@ const makeAppConfig = (env = {}) => ({
                         }
                     },
                     {
+                        loader: 'postcss-loader',
+                        options: {
+                            sourceMap: !env.disableCssSourceMap,
+                            plugins: () => [
+                                require('autoprefixer')()
+                            ]
+                        }
+                    },
+                    {
                         loader: 'sass-loader',
                         options: {
                             sourceMap: !env.disableCssSourceMap
