@@ -1,11 +1,13 @@
 'use strict';
 
-const NODE_ENV = process.env.NODE_ENV || 'development';
-const webpack = require('webpack');
-var path = require('path');
+// Чтобы отключить css source maps, добавь параметр --env.disableCssSourceMap к вызову вебпака
+
+const NODE_ENV = process.env.NODE_ENV || 'development',
+    webpack = require('webpack'),
+    path = require('path');
 
 
-var appConfig = {
+const makeAppConfig = (env = {}) => ({
     context: path.resolve(__dirname, 'src'),
 
     entry: {
@@ -41,6 +43,30 @@ var appConfig = {
             {
                 test: /\.html$/,
                 use: ['ignore-loader']
+            },
+            {
+                test: /\.scss$/,
+                exclude: /node_modules/,
+                use: [
+                    {
+                        loader: 'style-loader',
+                        options: {
+                            sourceMap: !env.disableCssSourceMap
+                        }
+                    },
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: !env.disableCssSourceMap
+                        }
+                    },
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sourceMap: !env.disableCssSourceMap
+                        }
+                    },
+                ],
             }
 
         ]
@@ -53,25 +79,25 @@ var appConfig = {
         alias: {},
         extensions: ['.js', '.jsx']
     }
-};
+});
 
-console.log('NODE_ENV', NODE_ENV);
-if (NODE_ENV == 'production') {
-    appConfig.plugins.push(
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                // don't show unreachable variables etc
-                warnings: false,
-                drop_console: true,
-                unsafe: true
-            }
-        })
-    );
-}
+// console.log('NODE_ENV', NODE_ENV);
+// if (NODE_ENV == 'production') {
+//     appConfig.plugins.push(
+//         new webpack.optimize.UglifyJsPlugin({
+//             compress: {
+//                 // don't show unreachable variables etc
+//                 warnings: false,
+//                 drop_console: true,
+//                 unsafe: true
+//             }
+//         })
+//     );
+// }
 
 /*
 var uiConfig = Object.assign({}, appConfig);
 */
 
 
-module.exports = appConfig;
+module.exports = makeAppConfig;
