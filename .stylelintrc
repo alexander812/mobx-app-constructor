@@ -2,6 +2,7 @@
   "syntax": "scss",
   "extends": ["stylelint-config-standard", "stylelint-config-recommended-scss"],
   "rules": {
+    "block-no-empty": null,
     "max-empty-lines": 2
   }
 }
