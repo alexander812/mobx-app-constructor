@@ -27,21 +27,35 @@ function prepareMask(mask, sp){
 export function formatNumber(str, mask, cache) {
   //const arr = str.split('');
 
-  let result = mask;
+  let result = '';
   let regStr = '';
 
   const fromMask = cache;
 
   fromMask.separators.forEach((val, i)=>{
-    if(fromMask.separators[i+1]){
+    if(typeof fromMask.separators[i+1] !== 'undefined'){
       regStr += `${val}(\\d*)`
+    }else {
+      regStr += val;
     }
+  });
+
+  console.log(['regStr', regStr]);
+
+  const enteredArr = (new RegExp(regStr)).exec(str);
+
+  console.log(['fromMask', fromMask]);
+
+  fromMask.separators.forEach((val, i)=>{
+    //console.log([222, fromMask.masks[i+1].length, fromMask.masks[i+1]]);
+    result += `${val}${enteredArr[i+1] ? enteredArr[i+1].slice(0, fromMask.masks[i] ? fromMask.masks[i].length : 99) : ''}`;
   });
 
 
 
-  console.log([fromMask, (new RegExp(regStr)).exec(str) ]);
-  return;
+
+  //console.log([fromMask, result, (new RegExp(regStr)).exec(str) ]);
+  return result;
   //const fromString = prepareMask(str,  "\\d");
 
 
@@ -129,10 +143,12 @@ export default class InputDuration extends React.Component {
 
     this.input = null;
     this.caret = null;
+
     this.mask = prepareMask(props.mask, 'x');
 
     this.onChange = this.onChange.bind(this);
     this.onKeyPress = this.onKeyPress.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
     this.setInputRef = this.setInputRef.bind(this);
 
   }
@@ -146,7 +162,14 @@ export default class InputDuration extends React.Component {
     this.input = node;
   }
 
+  onKeyDown(e) {
+    if (e.target instanceof HTMLInputElement) {
+      this.lastCaret = e.target.selectionStart;
+    }
+  }
+
   onKeyPress(e) {
+
     if (/[^\d]/.test(e.key)) {
       e.preventDefault();
     }
@@ -160,15 +183,9 @@ export default class InputDuration extends React.Component {
       caret = e.target.selectionStart;
     }
 
-/*
-    if(!/[\:]/.test(result)){
-      return;
-    }
-*/
-
-
-
     if(this.isValid(result)){
+
+      console.log(['isValid', result]);
 
       result = formatNumber(result, this.props.mask, this.mask);
 
@@ -190,7 +207,7 @@ export default class InputDuration extends React.Component {
     } else {
 
       setTimeout(()=>{
-        setCaret(this.input, this.caret);
+        setCaret(this.input, this.lastCaret );
       }, 0);
 
     }
@@ -202,6 +219,21 @@ export default class InputDuration extends React.Component {
 
   isValid(val){
 
+    let regStr = '';
+
+    this.mask.separators.forEach((val, i)=>{
+      if(typeof this.mask.separators[i+1] !== 'undefined'){
+        regStr += `${val}(\\d*)`
+      } else {
+        regStr += val;
+      }
+    });
+
+
+
+    return (new RegExp(regStr)).test(val);
+
+/*
     let result = true;
     const arr = val.split(':');
     const [before, after] = arr;
@@ -215,9 +247,10 @@ export default class InputDuration extends React.Component {
     } else if(after.length && afterNumber > 59){
       result = false;
     }
+*/
 
 
-    return result;
+    ///return result;
   }
 
 
@@ -231,6 +264,7 @@ export default class InputDuration extends React.Component {
           value={this.state.value}
           onChange={this.onChange}
           onKeyPress={this.onKeyPress}
+          onKeyDown={this.onKeyDown}
           type="text"
 
         />
