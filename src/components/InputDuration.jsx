@@ -3,20 +3,64 @@ export function trim(str) {
   return str.replace(new RegExp('^[^\\d\\:]+|[^\\d\\:]+$', 'g'), '');
 }
 
-function test(){
-  const mask = 'xx ч. xx мин. xx сек.';
-  const arr = mask.split(/x+/);
-  console.log(['arr', arr]);
+function prepareMask(mask, sp){
+ //const mask = 'xx ч. xx мин. xx сек.';
+  const result = {};
+  const arr1 = mask.split(new RegExp(`${sp}+`));
+  const arr2 = mask.split(new RegExp(`[^${sp}]+`));
+
+  for(let i = arr2.length - 1; i >= 0; i--) {
+    if(!(new RegExp(sp)).test(arr2[i])) {
+      arr2.splice(i, 1);
+    }
+  }
+
+  console.log([123,arr1, arr2] );
+  return {
+    separators: arr1,
+    masks: arr2,
+  }
 
 }
-test();
 
-export function formatNumber(str, maskParam) {
+
+export function formatNumber(str, mask, cache) {
   //const arr = str.split('');
 
+  let result = mask;
+  let regStr = '';
+
+  const fromMask = cache;
+
+  fromMask.separators.forEach((val, i)=>{
+    if(fromMask.separators[i+1]){
+      regStr += `${val}(\\d*)`
+    }
+  });
 
 
 
+  console.log([fromMask, (new RegExp(regStr)).exec(str) ]);
+  return;
+  //const fromString = prepareMask(str,  "\\d");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
   let result = maskParam;
   const [maskBefore, maskAfter] = maskParam.split(':');
   const [strBefore, strAfter] = str.split(':');
@@ -38,9 +82,10 @@ export function formatNumber(str, maskParam) {
       ? letter : '';
     result = result.replace(/x/, replacement);
   });
+*/
 
 
-  return result;
+  //return result;
 
 
 /*  let mask = maskParam;
@@ -79,11 +124,13 @@ export default class InputDuration extends React.Component {
     super(props);
     this.state = {
       //value:props && props.value ? props.value : ''
-      value:'12:30',
+      value:props.value,
     };
 
     this.input = null;
     this.caret = null;
+    this.mask = prepareMask(props.mask, 'x');
+
     this.onChange = this.onChange.bind(this);
     this.onKeyPress = this.onKeyPress.bind(this);
     this.setInputRef = this.setInputRef.bind(this);
@@ -123,7 +170,7 @@ export default class InputDuration extends React.Component {
 
     if(this.isValid(result)){
 
-      result = formatNumber(result, this.props.mask);
+      result = formatNumber(result, this.props.mask, this.mask);
 
 
       const oldValue = this.state.value;
