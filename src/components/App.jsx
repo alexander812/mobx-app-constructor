@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Pairs from "components/Pairs/Pairs";
+import InputDuration from "components/InputDuration.jsx";
 
 export default class App extends Component {
 
@@ -9,7 +10,9 @@ export default class App extends Component {
     return (
       <header>
         <h1>Appp</h1>
-        <Pairs/>
+        <InputDuration
+          initTime="12:30"
+        />
       </header>
     );
   }
