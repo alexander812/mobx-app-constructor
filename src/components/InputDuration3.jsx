@@ -2,20 +2,8 @@ import React from "react";
 export function trim(str) {
   return str.replace(new RegExp('^[^\\d\\:]+|[^\\d\\:]+$', 'g'), '');
 }
-
-function test(){
-  const mask = 'xx ч. xx мин. xx сек.';
-  const arr = mask.split(/x+/);
-  console.log(['arr', arr]);
-
-}
-test();
-
 export function formatNumber(str, maskParam) {
   //const arr = str.split('');
-
-
-
 
   let result = maskParam;
   const [maskBefore, maskAfter] = maskParam.split(':');
@@ -43,16 +31,16 @@ export function formatNumber(str, maskParam) {
   return result;
 
 
-/*  let mask = maskParam;
-  arr.forEach((letter) => {
-    if (/[\d\+]/.test(letter)) {
-      mask = mask.replace(/x/, letter);
-    }
-  });
+  /*  let mask = maskParam;
+    arr.forEach((letter) => {
+      if (/[\d\+]/.test(letter)) {
+        mask = mask.replace(/x/, letter);
+      }
+    });
 
-  mask = trim(mask.replace(/x(-)/g, '').replace(/x/g, ''));
+    mask = trim(mask.replace(/x(-)/g, '').replace(/x/g, ''));
 
-  return mask;*/
+    return mask;*/
 }
 export function setCaret(tearget, caretPos) {
 
@@ -113,17 +101,17 @@ export default class InputDuration extends React.Component {
       caret = e.target.selectionStart;
     }
 
-/*
-    if(!/[\:]/.test(result)){
-      return;
-    }
-*/
+    /*
+        if(!/[\:]/.test(result)){
+          return;
+        }
+    */
 
 
 
     if(this.isValid(result)){
 
-      result = formatNumber(result, this.props.mask);
+      result = formatNumber(result, 'xx ч xx мин.');
 
 
       const oldValue = this.state.value;
