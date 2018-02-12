@@ -15,7 +15,7 @@ function prepareMask(mask, sp){
     }
   }
 
-  console.log([123,arr1, arr2] );
+ // console.log([123,arr1, arr2] );
   return {
     separators: arr1,
     masks: arr2,
@@ -24,11 +24,11 @@ function prepareMask(mask, sp){
 }
 
 
-export function formatNumber(str, mask, cache) {
-  //const arr = str.split('');
+export function formatNumber(str, mask, cache, caret) {
 
   let result = '';
   let regStr = '';
+  let newCaret = null;
 
   const fromMask = cache;
 
@@ -40,78 +40,33 @@ export function formatNumber(str, mask, cache) {
     }
   });
 
-  console.log(['regStr', regStr]);
+  //console.log(['regStr', regStr]);
 
   const enteredArr = (new RegExp(regStr)).exec(str);
 
-  console.log(['fromMask', fromMask]);
+  //console.log(['fromMask', fromMask]);
 
   fromMask.separators.forEach((val, i)=>{
     //console.log([222, fromMask.masks[i+1].length, fromMask.masks[i+1]]);
-    result += `${val}${enteredArr[i+1] ? enteredArr[i+1].slice(0, fromMask.masks[i] ? fromMask.masks[i].length : 99) : ''}`;
-  });
 
+    const maskLength =  fromMask.masks[i] ? fromMask.masks[i].length : 99;
+    const enteredValue = enteredArr[i+1] || '';
 
+    result += `${val}${enteredValue.slice(0, maskLength)}`;
+    if(result.length === caret &&
+      maskLength &&
+      maskLength === enteredValue.length &&
+      fromMask.separators[i+1]){
 
-
-  //console.log([fromMask, result, (new RegExp(regStr)).exec(str) ]);
-  return result;
-  //const fromString = prepareMask(str,  "\\d");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-  let result = maskParam;
-  const [maskBefore, maskAfter] = maskParam.split(':');
-  const [strBefore, strAfter] = str.split(':');
-  let resultBefore = strBefore && strBefore.split('');
-  let resultAfter = strAfter && strAfter.split('');
-
-
-  maskBefore.split('').forEach((val, index) => {
-    const letter = resultBefore && resultBefore[index];
-    const replacement = /[\d]/.test(letter)
-      ? letter : '';
-    result = result.replace(/x/, replacement);
-  });
-
-
-  maskAfter.split('').forEach((val, index) => {
-    const letter = resultAfter && resultAfter[index];
-    const replacement = /[\d]/.test(letter)
-      ? letter : '';
-    result = result.replace(/x/, replacement);
-  });
-*/
-
-
-  //return result;
-
-
-/*  let mask = maskParam;
-  arr.forEach((letter) => {
-    if (/[\d\+]/.test(letter)) {
-      mask = mask.replace(/x/, letter);
+      newCaret = result.length + fromMask.separators[i+1].length;
     }
+    //console.log(['result', result.length, maskLength, enteredValue.length, caret]);
   });
 
-  mask = trim(mask.replace(/x(-)/g, '').replace(/x/g, ''));
-
-  return mask;*/
+  return {
+    result,
+    caret:  newCaret,
+  };
 }
 export function setCaret(tearget, caretPos) {
 
@@ -177,17 +132,17 @@ export default class InputDuration extends React.Component {
 
   onChange(e){
     const t = e.currentTarget;
-    let result = t.value;
+    let value = t.value;
     let caret;
     if (e.target instanceof HTMLInputElement) {
       caret = e.target.selectionStart;
     }
 
-    if(this.isValid(result)){
+    if(this.isValid(value)){
 
-      console.log(['isValid', result]);
 
-      result = formatNumber(result, this.props.mask, this.mask);
+      const {result, caret: formatCaret} = formatNumber(value, this.props.mask, this.mask, caret);
+
 
 
       const oldValue = this.state.value;
@@ -197,7 +152,10 @@ export default class InputDuration extends React.Component {
       const diffReal = newValue.length - oldValue.length;
       const diff = caret < oldValue.length && diffReal > diffClear ? diffClear : diffReal;
       const newCaret = caret + (diff >= 0 ? diff - 1 : 0);
-      if (newCaret >= 0) {
+      if (formatCaret) {
+        console.log(['formatCaret', caret, formatCaret]);
+        this.caret = formatCaret;
+      } else if (newCaret >= 0) {
         this.caret = newCaret;
       }
 
@@ -260,13 +218,13 @@ export default class InputDuration extends React.Component {
     return (
       <div>
         <input
+          style={{width:'100%'}}
           ref={this.setInputRef}
           value={this.state.value}
           onChange={this.onChange}
           onKeyPress={this.onKeyPress}
           onKeyDown={this.onKeyDown}
           type="text"
-
         />
       </div>
 

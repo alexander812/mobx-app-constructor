@@ -11,8 +11,16 @@ export default class App extends Component {
       <header>
         <h1>Appp</h1>
         <InputDuration
-          value="-921- 570 04 91"
-          mask="-xxx- xxx xx xx"
+          value="Время 1 час 12 минут 10 секунд"
+          mask="Время xxx час xx минут xx секунд"
+        />
+        <InputDuration
+          value="12:00"
+          mask="xx:xx"
+        />
+        <InputDuration
+          value="12$"
+          mask="xx$"
         />
       </header>
     );
